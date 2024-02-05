@@ -17,7 +17,8 @@ body {
   text-align: center;
 }
 
-#time-option {
+#time-option,
+#datePicker {
   outline: none;
   border: none;
   text-align: center;
@@ -27,7 +28,8 @@ body {
   margin-left: 10px;
 }
 
-#save-btn {
+#promodoro-save-btn,
+#datePicker-save-btn {
   margin-left: 10px;
   border: none;
   outline: none;

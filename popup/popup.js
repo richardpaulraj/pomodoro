@@ -1,14 +1,38 @@
+//
+
+const mainPage = document.getElementById('mainPage')
+
+const defaultPage = document.getElementById('myLogo')
+const lofiPage = document.getElementById('lofi')
+const daysLeftPage = document.getElementById('daysLeft')
+
+//Testing
+
+defaultPage.addEventListener('click', () => {
+  loadPage('defaultPage')
+})
+
+lofiPage.addEventListener('click', () => {
+  loadPage('lofiPage')
+})
+daysLeftPage.addEventListener('click', () => {
+  loadPage('daysLeftPage')
+})
+
+//
+
+//Promodoro Page Starts
 let tasks = []
 
 function updateTime() {
-  chrome.storage.local.get(["timer", "timeOption"], (res) => {
-    const time = document.getElementById("time")
+  chrome.storage.local.get(['timer', 'timeOption'], (res) => {
+    const time = document.getElementById('time')
 
     const minutes = `${Math.floor(res.timeOption - res.timer / 60)}`.padStart(
       2,
       0
     )
-    let seconds = "00"
+    let seconds = '00'
     if (res.timer % 60 !== 0) {
       seconds = `${60 - (res.timer % 60)}`.padStart(2, 0)
     }
@@ -19,40 +43,40 @@ function updateTime() {
 updateTime()
 setInterval(updateTime, 1000)
 
-const startTimerBtn = document.getElementById("start-timer-btn")
-startTimerBtn.addEventListener("click", () => {
-  chrome.storage.local.get(["isRunning"], (res) => {
+const startTimerBtn = document.getElementById('start-timer-btn')
+startTimerBtn.addEventListener('click', () => {
+  chrome.storage.local.get(['isRunning'], (res) => {
     chrome.storage.local.set(
       {
         isRunning: !res.isRunning,
       },
       () => {
         startTimerBtn.textContent = !res.isRunning
-          ? "Pause Timer"
-          : "Start Timer"
+          ? 'Pause Timer'
+          : 'Start Timer'
       }
     )
   })
 })
 
-const resetTimerBtn = document.getElementById("reset-timer-btn")
-resetTimerBtn.addEventListener("click", () => {
+const resetTimerBtn = document.getElementById('reset-timer-btn')
+resetTimerBtn.addEventListener('click', () => {
   chrome.storage.local.set(
     {
       timer: 0,
       isRunning: false,
     },
     () => {
-      startTimerBtn.textContent = "Start Timer"
+      startTimerBtn.textContent = 'Start Timer'
     }
   )
 })
 
-const addTaskBtn = document.getElementById("add-task-btn")
+const addTaskBtn = document.getElementById('add-task-btn')
 
-addTaskBtn.addEventListener("click", () => addTask())
+addTaskBtn.addEventListener('click', () => addTask())
 
-chrome.storage.sync.get(["tasks"], (result) => {
+chrome.storage.sync.get(['tasks'], (result) => {
   tasks = result.tasks ? result.tasks : []
   renderTasks()
 })
@@ -64,36 +88,36 @@ function saveTasks() {
 }
 
 function renderTask(taskNum) {
-  const taskRow = document.createElement("div")
-  const text = document.createElement("input")
-  text.type = "text"
-  text.placeholder = "Enter a task...."
+  const taskRow = document.createElement('div')
+  const text = document.createElement('input')
+  text.type = 'text'
+  text.placeholder = 'Enter a task....'
   text.value = tasks[taskNum]
-  text.className = "task-input"
-  text.addEventListener("change", () => {
+  text.className = 'task-input'
+  text.addEventListener('change', () => {
     tasks[taskNum] = text.value
     saveTasks()
   })
 
-  const deleteBtn = document.createElement("input")
-  deleteBtn.type = "button"
-  deleteBtn.value = "x"
-  deleteBtn.className = "task-delete"
+  const deleteBtn = document.createElement('input')
+  deleteBtn.type = 'button'
+  deleteBtn.value = 'x'
+  deleteBtn.className = 'task-delete'
 
-  deleteBtn.addEventListener("click", () => {
+  deleteBtn.addEventListener('click', () => {
     deleteTask(taskNum)
   })
 
   taskRow.appendChild(text)
   taskRow.appendChild(deleteBtn)
 
-  const taskContainer = document.getElementById("task-container")
+  const taskContainer = document.getElementById('task-container')
   taskContainer.appendChild(taskRow)
 }
 
 function addTask() {
   const taskNum = tasks.length
-  tasks.push("")
+  tasks.push('')
   renderTask(taskNum)
   saveTasks()
 }
@@ -105,9 +129,12 @@ function deleteTask(taskNum) {
 }
 
 function renderTasks() {
-  const taskContainer = document.getElementById("task-container")
-  taskContainer.textContent = ""
+  const taskContainer = document.getElementById('task-container')
+  taskContainer.textContent = ''
   tasks.forEach((taskText, taskNum) => {
     renderTask(taskNum)
   })
 }
+
+const timeChangeImg = document.getElementById('time-change-img')
+timeChangeImg.addEventListener('click', () => chrome.runtime.openOptionsPage())
