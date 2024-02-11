@@ -1,4 +1,6 @@
 //Promodoro Time
+const datePickerEnableBtn = document.getElementById('datePicker-enable-btn')
+let datePickerFlag = false
 
 const timeOption = document.getElementById('time-option')
 timeOption.addEventListener('change', (e) => {
@@ -42,6 +44,7 @@ datePicker.setAttribute('min', today)
 chrome.storage.local.get('selectedDate', (e) => {
   if (e.selectedDate) {
     datePicker.value = e.selectedDate
+    setDateOnBadgeText(e.selectedDate)
   }
 })
 
@@ -52,7 +55,48 @@ datePickerSaveBtn.addEventListener('click', () => {
   chrome.storage.local.set({
     selectedDate: selectedDatevalue,
   })
+  setDateOnBadgeText(selectedDatevalue)
 })
 
 //adding the functionality
-let targetDate = new Date('')
+
+function setDateOnBadgeText(finalDate) {
+  let targetDate = new Date(finalDate)
+  let currentDate = new Date()
+
+  // Set both dates to the beginning of the day to avoid time discrepancies.
+  targetDate.setHours(0, 0, 0, 0)
+  currentDate.setHours(0, 0, 0, 0)
+
+  let difference = targetDate.getTime() - currentDate.getTime()
+  // 1000 milliseonds is 1 seconds
+  //.getTime gives in milliseconds
+  let daysLeft = Math.floor(difference / (1000 * 60 * 60 * 24))
+
+  chrome.storage.local.set({
+    daysLeft: daysLeft,
+  })
+
+  //Displaying
+  chrome.action.setBadgeText({
+    text: daysLeft.toString(),
+  })
+
+  console.log(`Days left : ${daysLeft} days`)
+}
+
+datePickerEnableBtn.addEventListener('click', (e) => {
+  datePickerFlag = !datePickerFlag
+
+  if (!datePickerFlag) {
+    chrome.storage.local.get(['daysLeft'], (e) => {
+      datePickerEnableBtn.textContent = 'Enabled'
+      chrome.action.setBadgeText({
+        text: e.daysLeft.toString(),
+      })
+    })
+  } else {
+    datePickerEnableBtn.textContent = 'Disabled'
+    chrome.action.setBadgeText({ text: '' })
+  }
+})

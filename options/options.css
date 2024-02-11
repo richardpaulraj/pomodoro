@@ -29,7 +29,8 @@ body {
 }
 
 #promodoro-save-btn,
-#datePicker-save-btn {
+#datePicker-save-btn,
+#datePicker-enable-btn {
   margin-left: 10px;
   border: none;
   outline: none;

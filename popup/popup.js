@@ -1,26 +1,3 @@
-//
-
-const mainPage = document.getElementById('mainPage')
-
-const defaultPage = document.getElementById('myLogo')
-const lofiPage = document.getElementById('lofi')
-const daysLeftPage = document.getElementById('daysLeft')
-
-//Testing
-
-defaultPage.addEventListener('click', () => {
-  loadPage('defaultPage')
-})
-
-lofiPage.addEventListener('click', () => {
-  loadPage('lofiPage')
-})
-daysLeftPage.addEventListener('click', () => {
-  loadPage('daysLeftPage')
-})
-
-//
-
 //Promodoro Page Starts
 let tasks = []
 

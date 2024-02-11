@@ -17,7 +17,8 @@
     "default_title": "Click me to Open Promodome Timer",
     "default_popup": "popup/popup.html"
   },
-  "permissions": ["storage", "alarms", "notifications"],
+  "permissions": ["storage", "alarms", "notifications", "contextMenus"],
+
   "background": {
     "service_worker": "background.js"
   },
